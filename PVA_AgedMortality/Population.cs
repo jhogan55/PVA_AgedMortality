@@ -24,16 +24,12 @@ namespace PVA_AgedMortality
 
         }
 
-        //method: add ind to pop
-       public List<Ind> AddInd(Ind i)
+        //method: mother with dependent infant died, remove her infant from pop
+        public void RemoveDependentInfant(int m)  
         {
-            pop.Add(i);
-            return pop;
-        }
-        public List<Ind> RemoveInd(Ind i)
-        {
-            pop.Remove(i);
-            return pop;
+           //use mother's ID (m) to find infant with motherID m 
+           //message box saying "Mother #XXX died, removing dependent infant ID #YYY"
+           //remove that infant from pop
         }
 
     }

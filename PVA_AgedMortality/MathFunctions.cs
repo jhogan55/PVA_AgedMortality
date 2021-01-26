@@ -25,5 +25,12 @@ namespace PVA_AgedMortality
             m = y * 12;
             return m;
         }
+
+        public static int MonthsToYears(int m)
+        {
+            int y;
+            y = m / 12;
+            return y;
+        }
     }
 }

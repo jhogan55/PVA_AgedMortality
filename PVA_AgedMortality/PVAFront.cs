@@ -21,8 +21,8 @@ namespace PVA_AgedMortality
         public frmPvaFront()
         {
             InitializeComponent();
-            txtTrials.Text = Convert.ToString(100);
-            txtYears.Text = Convert.ToString(100);
+            txtTrials.Text = Convert.ToString(1);
+            txtYears.Text = Convert.ToString(1);            
         }
 
 
@@ -33,12 +33,12 @@ namespace PVA_AgedMortality
             trials = Convert.ToInt32(txtTrials.Text);
             years = Convert.ToInt32(txtYears.Text);
             months = MathFunctions.YearsToMonths(years);
-
-            
+           
             for (int t = 0; t < trials; t++) //FOR LOOP #1: run t trials 
             {
-                MessageBox.Show("Running trial " + t + 1 + " of " + trials);
-                Month.Simulate(months, startingPop);
+               MessageBox.Show("Running trial " + (t + 1) + " of " + trials);
+               Trial.SingleTrial(months, startingPop);
+                RefreshPopList(startingPop);
             } //END OF FOR LOOP 1: end of trials 
         }
 
@@ -46,13 +46,24 @@ namespace PVA_AgedMortality
         {
             //TODO: expand user customization to include other ind variables 
             Ind newInd = new Ind((Convert.ToInt32(txtAge.Text) * 12), false, 0, 0, 0, 0);
-            startingPop.AddInd(newInd);
-            RefreshPopList(newInd);
+            startingPop.Add(newInd);
+            RefreshPopList(startingPop);
         }
 
-        private void RefreshPopList(Ind i)
+        private void RefreshPopList(Population sp)
         {
-            lstStartPop.Items.Add(i.DisplayIndInPop());
+            lstStartPop.Items.Clear();
+            foreach (Ind i in startingPop)
+            {
+                lstStartPop.Items.Add(i.DisplayIndInPop());
+            }
+        }
+
+        private void btnDefault_Click(object sender, EventArgs e)
+        {
+            startingPop.Clear();
+            startingPop = LVstarterPop.DefaultPop();
+            RefreshPopList(startingPop);
         }
     }
 }

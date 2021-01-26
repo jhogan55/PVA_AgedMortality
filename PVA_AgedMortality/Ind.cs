@@ -56,16 +56,17 @@ namespace PVA_AgedMortality
             set { monthsSinceBirth = value; } //TODO: data validation, months since birth should never exceed X years  
         }
 
-        //constructor 
-        public Ind(int age, bool preg, int monthsPreg, int depInf, int mom, int monthsSinceBirth)
+        //constructor for a new
+        public Ind(int mAge, bool preg, int mPreg, int depInf, int mom, int mSinceBirth)
         {
             IndID = idCount;
             idCount++;
-            Age = age;
+            Age = mAge;
             IsPreg = preg;
-            MonthsPreg = monthsPreg;
+            MonthsPreg = mPreg;
             DepInfID = depInf;
             MotherID = mom;
+            MonthsSinceBirth = mSinceBirth;
         }
 
         //methods
@@ -109,8 +110,6 @@ namespace PVA_AgedMortality
             if (Age == VitalRates.DEPENDENCYLENGTH) { MotherID = 0; }
         }
         
-        //Remove 
-
         //String override for list box
         public string DisplayIndInPop()
         {

@@ -38,6 +38,7 @@ namespace PVA_AgedMortality
             this.lblAge = new System.Windows.Forms.Label();
             this.btnAdd = new System.Windows.Forms.Button();
             this.lstStartPop = new System.Windows.Forms.ListBox();
+            this.btnDefault = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // btnRun
@@ -90,7 +91,7 @@ namespace PVA_AgedMortality
             // txtAge
             // 
             this.txtAge.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
-            this.txtAge.Location = new System.Drawing.Point(319, 112);
+            this.txtAge.Location = new System.Drawing.Point(319, 176);
             this.txtAge.Name = "txtAge";
             this.txtAge.Size = new System.Drawing.Size(93, 26);
             this.txtAge.TabIndex = 5;
@@ -99,7 +100,7 @@ namespace PVA_AgedMortality
             // 
             this.lblAge.AutoSize = true;
             this.lblAge.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblAge.Location = new System.Drawing.Point(418, 118);
+            this.lblAge.Location = new System.Drawing.Point(418, 179);
             this.lblAge.Name = "lblAge";
             this.lblAge.Size = new System.Drawing.Size(94, 20);
             this.lblAge.TabIndex = 6;
@@ -108,11 +109,11 @@ namespace PVA_AgedMortality
             // btnAdd
             // 
             this.btnAdd.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnAdd.Location = new System.Drawing.Point(319, 146);
+            this.btnAdd.Location = new System.Drawing.Point(319, 208);
             this.btnAdd.Name = "btnAdd";
-            this.btnAdd.Size = new System.Drawing.Size(115, 67);
+            this.btnAdd.Size = new System.Drawing.Size(93, 67);
             this.btnAdd.TabIndex = 7;
-            this.btnAdd.Text = "&Add";
+            this.btnAdd.Text = "&Add Ind";
             this.btnAdd.UseVisualStyleBackColor = true;
             this.btnAdd.Click += new System.EventHandler(this.btnAdd_Click);
             // 
@@ -124,11 +125,23 @@ namespace PVA_AgedMortality
             this.lstStartPop.Size = new System.Drawing.Size(209, 329);
             this.lstStartPop.TabIndex = 8;
             // 
+            // btnDefault
+            // 
+            this.btnDefault.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnDefault.Location = new System.Drawing.Point(319, 94);
+            this.btnDefault.Name = "btnDefault";
+            this.btnDefault.Size = new System.Drawing.Size(93, 67);
+            this.btnDefault.TabIndex = 9;
+            this.btnDefault.Text = "&Default Pop";
+            this.btnDefault.UseVisualStyleBackColor = true;
+            this.btnDefault.Click += new System.EventHandler(this.btnDefault_Click);
+            // 
             // frmPvaFront
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.btnDefault);
             this.Controls.Add(this.lstStartPop);
             this.Controls.Add(this.btnAdd);
             this.Controls.Add(this.lblAge);
@@ -156,6 +169,7 @@ namespace PVA_AgedMortality
         private System.Windows.Forms.Label lblAge;
         private System.Windows.Forms.Button btnAdd;
         private System.Windows.Forms.ListBox lstStartPop;
+        private System.Windows.Forms.Button btnDefault;
     }
 }
 
