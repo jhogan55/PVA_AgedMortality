@@ -56,7 +56,13 @@ namespace PVA_AgedMortality
             set { monthsSinceBirth = value; } //TODO: data validation, months since birth should never exceed X years  
         }
 
-        //constructor for a new
+        //default constructor
+        public Ind()
+        {
+
+        }
+
+        //constructor for a new ind
         public Ind(int mAge, bool preg, int mPreg, int depInf, int mom, int mSinceBirth)
         {
             IndID = idCount;
@@ -75,6 +81,7 @@ namespace PVA_AgedMortality
         public void AgeUp ()
         {
             Age++;
+            LoseMotherDependency();
             if (IsPreg)
             {
                 MonthsPreg++;
@@ -85,7 +92,26 @@ namespace PVA_AgedMortality
             }
         }
 
-        public void GiveBirth ()
+        //Test individuals for monthly survival
+        public static bool IndSurvTest(Ind i, bool amr)
+        {
+            bool survived = MathFunctions.CoinFlip(VitalRates.MonthlySurvival(i.Age, amr));
+            return survived;
+        }
+
+        //Remove mother dependency from weaned infants  
+        public void LoseMotherDependency()
+        {
+            if (Age == VitalRates.DEPENDENCYLENGTH) 
+            {
+                MessageBox.Show("Mother dependency for " + ReturnID() + " dropped as ind is now 12 months. Mother # " + MotherID);
+                MotherID = 0;
+                MessageBox.Show("Mother ID now: " + ReturnMotherID());
+            }
+        }
+
+        //Female has been pregnant for GESTATION LENGTH, so reset pregnancy variables, give birth. If baby female, create new ind. 
+        public void GiveBirth()
         {
             IsPreg = false;
             MonthsPreg = 0;
@@ -104,16 +130,35 @@ namespace PVA_AgedMortality
             MessageBox.Show("Ind " + indID + " got pregnant this time: " + IsPreg);
         }
 
-        //Remove mother dependency from weaned infants  
-        public void LoseMotherDependency()
+
+
+        //Clone ind, used to keep starter population separate from tested pop 
+        public static Ind CloneInd(Ind i)
         {
-            if (Age == VitalRates.DEPENDENCYLENGTH) { MotherID = 0; }
+            Ind clonedInd = new Ind();
+            clonedInd.IndID = i.IndID;
+            clonedInd.Age = i.Age;
+            clonedInd.IsPreg = i.IsPreg;
+            clonedInd.MonthsPreg = i.MonthsPreg;
+            clonedInd.MonthsSinceBirth = i.MonthsSinceBirth;
+            clonedInd.DepInfID = i.DepInfID;
+            clonedInd.MotherID = i.MotherID;
+            return clonedInd;
         }
         
         //String override for list box
         public string DisplayIndInPop()
         {
             return IndID + ", " + Age + " months old";
+        }
+
+        public int ReturnID()
+        {
+            return IndID;
+        }
+         public int ReturnMotherID()
+        {
+            return MotherID;
         }
 
     }

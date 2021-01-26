@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace PVA_AgedMortality
 {
@@ -30,6 +31,37 @@ namespace PVA_AgedMortality
            //use mother's ID (m) to find infant with motherID m 
            //message box saying "Mother #XXX died, removing dependent infant ID #YYY"
            //remove that infant from pop
+        }
+
+        public static Population ClonePop(Population p)
+        {
+            Population n = new Population();
+            foreach (Ind i in p)
+            {
+                n.Add(Ind.CloneInd(i));
+            }
+            return n;
+        }
+
+        public static Population MonthlySurvivalTest(Population p, bool amr)
+        {
+            List<int> deadInd = new List<int>();
+            foreach (Ind i in p)
+            {
+                
+                bool survivedMonth = Ind.IndSurvTest(i, amr);
+                if (survivedMonth == false)
+                {
+                    deadInd.Add(i.ReturnID());
+                    MessageBox.Show("Ind " + i.DisplayIndInPop() + " months old, died. Removing from population");
+                }
+            } //end of foreach loop of population
+            foreach (int j in deadInd)
+            {
+                p.RemoveAll(Ind => Ind.ReturnID() == j);
+                p.RemoveAll(Ind => Ind.ReturnMotherID() == j);
+            }
+            return p;
         }
 
     }

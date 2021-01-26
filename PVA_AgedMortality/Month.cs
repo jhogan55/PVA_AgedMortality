@@ -7,22 +7,23 @@ using System.Windows.Forms;
 
 namespace PVA_AgedMortality
 {
-    public static class Month
+    public class Month
     {
-        //METHODS
-
-        //conduct monthly simulation 
-       
-
+        //METHODS    
         //One month simulation
         public static void SingleMonth(Population p)
         {
-
+            bool amrOccur = MathFunctions.CoinFlip(VitalRates.AMRRATE);
+            if (amrOccur)
+            {
+                MessageBox.Show("AMR occurred this month");
+            }
+            Population.MonthlySurvivalTest(p, amrOccur);
             foreach (Ind i in p)
             {
-                //increment all monthly counters for each individual
-                
+                //increment all monthly counters for each individual                
                 i.AgeUp();
+
                 //MessageBox.Show(i.DisplayIndInPop());
 
                 //give birth to any due babies

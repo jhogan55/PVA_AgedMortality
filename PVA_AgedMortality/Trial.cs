@@ -13,9 +13,10 @@ namespace PVA_AgedMortality
         {
             for (int i = 0; i < m; i++)
             {
-                MessageBox.Show("Month " + (i+1) + " of " + m);
-                Month.SingleMonth(p);                
+                //MessageBox.Show("Month " + (i+1) + " of " + m);
+                Month.SingleMonth(p);               
             }
+            MessageBox.Show("End of trial. Ending population: " + p.Count);
         }
     }
 }
