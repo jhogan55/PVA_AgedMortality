@@ -10,15 +10,7 @@ namespace PVA_AgedMortality
     public class Population: List<Ind>
     {
         //private list 
-        List<Ind> pop = new List<Ind>();
         public static List<int> weanedInf = new List<int>();
-        
-        //public property 
-        public List<Ind> Pop
-        {
-            get { return pop; }
-            set { pop = value; }
-        }
 
         //Constructor (default for now) 
         public Population ()
@@ -26,12 +18,14 @@ namespace PVA_AgedMortality
 
         }
 
+        //include all the individual-level changes to survivors here: eg 1 month older, 1 month further pregnant if preg etc 
         public static void MonthlyIndChanges(Population p)
         {
             foreach (Ind i in p)
             {
                 //increment all monthly counters for each individual                
                 i.AddMonthToIndCounters();
+                i.ChanceToConceive();
             }
         }
 

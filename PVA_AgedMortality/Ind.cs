@@ -108,9 +108,7 @@ namespace PVA_AgedMortality
             bool survived = MathFunctions.CoinFlip(VitalRates.MonthlySurvival(i, amr)); //if true, individual passed the survival test 
             return survived; 
         }
-
-        //Remove mother dependency from weaned infants 
-        //TODO: remove infant dependency from mother of weaned infants. This probably needs to be done separately? Store Infant's ID and cleanup in a separate method 
+        //Remove dependency between mother and infant. Store female infant ID to remove from mother at population-level 
         public void InfantDependencyTest()
         {
             if (Age == VitalRates.DEPENDENCYLENGTH) //is ind of weaning age? 
@@ -118,20 +116,20 @@ namespace PVA_AgedMortality
                 MotherID = 0; //if so, mother's ID no longer used in sim, reset to 0 
                 Population.weanedInf.Add(IndID); //add infant's ID to the list of weaned infants to remove from population  
             }
-            if (DepMaleAge == VitalRates.DEPENDENCYLENGTH)
+            if (DepMaleAge == VitalRates.DEPENDENCYLENGTH) //mothers lose their male infant dependency, but there is no male in pop to clean up 
             {
                 ResetDepMale();
             }
         }
-
-        //Get pregnant
-        public void GetPreg()
+        public void ChanceToConceive()
         {
-            if (MathFunctions.CoinFlip(VitalRates.ConceptionRate(Age))) { IsPreg = true; }
-            else IsPreg = false;
-            MessageBox.Show("Ind " + indID + " got pregnant this time: " + IsPreg);
+            if (!isPreg) //Only non-pregnant individuals can get pregnant 
+            {
+                isPreg = MathFunctions.CoinFlip(VitalRates.ConceptionRate(Age));
+                if (isPreg) MessageBox.Show("Pregnant female! Ind " + ReturnID());
+                //TODO: build in MonthsSincePreg and LastInfKilled for differentiated fertility rates 
+            }
         }
-
         //CheckPreg: increment the pregnancy counter for any individuals that are pregnant. If pregnancy has been long enough, give birth 
         private void CheckPreg()
         {
@@ -154,6 +152,7 @@ namespace PVA_AgedMortality
             {
                 DepInfID = idCount; //link female to mother 
                 Ind baby = new Ind(0, false, 0, false, 0, 0, IndID, 0); //create new baby
+                //TODO: ADD THIS NEW BABY TO POPULATION!!! 
                 MessageBox.Show("New female infant born, ID# " + baby.IndID + " , mother is #" + baby.MotherID);
                 Trial.TrialBirths++;
             }
@@ -164,9 +163,6 @@ namespace PVA_AgedMortality
                 //TODO: do we want to include male births in the trial birth count? If so, also include male baby deaths in trial death count
             }
         }
-
-
-
         //Clone ind, used to keep starter population separate from tested pop 
         public static Ind CloneInd(Ind i)
         {
@@ -181,8 +177,7 @@ namespace PVA_AgedMortality
             clonedInd.DepInfID = i.DepInfID;
             clonedInd.MotherID = i.MotherID;
             return clonedInd;
-        }
-        
+        }        
         //String override for list box
         public string DisplayIndInPop()
         {
@@ -196,7 +191,6 @@ namespace PVA_AgedMortality
             }
             else return IndID + ", " + Age + " months old, dependent infant #" + DepInfID ;
         }
-
         public int ReturnID()
         {
             return IndID;
@@ -205,34 +199,28 @@ namespace PVA_AgedMortality
         {
             return MotherID;
         }
-
         public void ResetDepFem()
         {
             DepInfID = 0;
             //MessageBox.Show("Infant is of age, no dep inf now. DepInfID = " + DepInfID);
         }
-
         public void ResetDepMale()
         {
             DepMaleInf = false;
             DepMaleAge = 0;
             //MessageBox.Show("Male infant is weaned, no longer dependent");
         }
-
         public int ReturnDepMaleAge()
         {
             return DepMaleAge;
         }
-
         public int ReturnAge()
         {
             return DepMaleAge;
         }
-
         public int ReturnInfID()
         {
             return DepInfID;
         }
-
     }
 }
