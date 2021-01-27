@@ -9,34 +9,41 @@ namespace PVA_AgedMortality
 {
     public class Month
     {
+
         //METHODS    
         //One month simulation
         public static void SingleMonth(Population p)
         {
-            bool amrOccur = MathFunctions.CoinFlip(VitalRates.AMRRATE);
-            if (amrOccur)
+            bool amr = AmrStatus();
+            Population.MonthlySurvivalTest(p, amr); //Test survival of each individual 
+            Population.MonthlyIndChanges(p); //Make all individual-level changes for the month: age, pregnancy duration,  
+            Population.RemoveInfantID(Population.weanedInf, p); //Remove infant dependencies from mothers 
+        }
+
+        //Method: determine if 1) an amr occurs, 2) if you are in a post-amr risk period 
+        private static bool AmrStatus()
+        {
+            bool amrOccur = MathFunctions.CoinFlip(VitalRates.AMRRATE); //determine if AMR occured this month. 
+            if (amrOccur) //amrOccured: reset amrRisk counter to 0
             {
-                MessageBox.Show("AMR occurred this month");
+                Trial.TimeSinceAmr = 0; //it has been 0 months since the last takeover 
+                Trial.TrialAmrs++;
+                //MessageBox.Show("AMR RISK: occurred this month, time since AMR = " + Trial.TimeSinceAmr + " months.");
+                return true;
             }
-            Population.MonthlySurvivalTest(p, amrOccur);
-            foreach (Ind i in p)
+            else
             {
-                //increment all monthly counters for each individual                
-                i.AgeUp();
-
-                //MessageBox.Show(i.DisplayIndInPop());
-
-                //give birth to any due babies
-                //i.GiveBirth();
-
-                //check dependencies for matured dependents
-                
-                //coin flip mortality 
-                    
-                //kill off any dependent infants of dead mothers 
-                
-                //
-
+                Trial.TimeSinceAmr++; //increment AMR counter by a month 
+                if (Trial.TimeSinceAmr <= VitalRates.AMRRISKPERIOD)
+                {
+                    //MessageBox.Show("AMR RISK: No amr, but one " + Trial.TimeSinceAmr + " months ago, so you are under AMR risk");
+                    return true;
+                } //you are still in the post-amr risk period 
+                else 
+                {
+                    return false; //it has been long enough since an amr group is no longer at risk 
+                }
+               
             }
         }
     }

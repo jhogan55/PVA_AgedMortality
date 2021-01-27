@@ -15,54 +15,60 @@ namespace PVA_AgedMortality
         //Form-level variables 
         Population startingPop = new Population(); //keep your starting pop saved to reset after each trial
         Population testPop = new Population(); //this is the pop you feed to your sim 
-        int trials = 0;
+        int trials = 0; //initialize form-level variables 
         int years = 0;
         int months = 0;
         
         public frmPvaFront()
         {
             InitializeComponent();
-            txtTrials.Text = Convert.ToString(3);
-            txtYears.Text = Convert.ToString(1);            
+            txtTrials.Text = Convert.ToString(3); //form loads, insert default values into text boxes 
+            txtYears.Text = Convert.ToString(1);
+            txtAge.Text = Convert.ToString(1);
         }
 
         private void btnRun_Click(object sender, EventArgs e)
         {
             //get trials and years 
-            trials = Convert.ToInt32(txtTrials.Text);
-            years = Convert.ToInt32(txtYears.Text);
-            months = MathFunctions.YearsToMonths(years);            
-           
-            for (int t = 0; t < trials; t++) //FOR LOOP #1: run t trials 
+            trials = Convert.ToInt32(txtTrials.Text); //How many trials does user want to run? 
+            years = Convert.ToInt32(txtYears.Text);   //How many years should each trial run for? 
+            months = MathFunctions.YearsToMonths(years); //Sim is run monthly, so convert years to months 
+            RunTrials(trials); //Start trials
+        }
+
+        //Trial loop: Call "single trial" method to run as many trials as user would like 
+        private void RunTrials(int trials)
+        {
+            for (int t = 0; t < trials; t++) //Start of trial loop
             {
-               testPop = Population.ClonePop(startingPop);
-               MessageBox.Show("Running trial " + (t + 1) + " of " + trials);
-               Trial.SingleTrial(months, testPop);
-            } //END OF FOR LOOP 1: end of trials 
+                testPop = Population.ClonePop(startingPop); //keep your starting pop intact and undisturbed, create a clone to use for simulation 
+                MessageBox.Show("Running trial " + (t + 1) + " of " + trials); //test message for debugging 
+                Trial.SingleTrial(months, testPop); //Pass your testPop and the # of months to run to the trial method in trial class 
+            } //End of trial loop
         }
 
         private void btnAdd_Click(object sender, EventArgs e) //add new individual to population
         {
             //TODO: expand user customization to include other ind variables 
-            Ind newInd = new Ind((Convert.ToInt32(txtAge.Text) * 12), false, 0, 0, 0, 0);
+            Ind newInd = new Ind((Convert.ToInt32(txtAge.Text) * 12), false, 0, false, 0, 0, 0, 0);
             startingPop.Add(newInd);
-            RefreshPopList(startingPop);
+            RefreshPopList(lstStartPop, startingPop);
         }
 
-        private void RefreshPopList(Population sp)
+        private void RefreshPopList(ListBox lb, Population sp) //method to update population list boxes
         {
-            lstStartPop.Items.Clear();
-            foreach (Ind i in startingPop)
+            lb.Items.Clear(); //reset list box 
+            foreach (Ind i in sp)
             {
-                lstStartPop.Items.Add(i.DisplayIndInPop());
+                lb.Items.Add(i.DisplayIndInPop()); //add individuals in pop one by one to box using the display method 
             }
         }
 
-        private void btnDefault_Click(object sender, EventArgs e)
+        private void btnDefault_Click(object sender, EventArgs e) //user wants to start with default population (currently LV 2020) 
         {
-            startingPop.Clear();
-            startingPop = LVstarterPop.DefaultPop();
-            RefreshPopList(startingPop);
+            startingPop.Clear(); //empty out starting pop list 
+            startingPop = LVstarterPop.DefaultPop(); //starting pop copies LV. TODO: decide if this should be refactored to use Population.ClonePop() instead? 
+            RefreshPopList(lstStartPop, startingPop);
         }
     }
 }
