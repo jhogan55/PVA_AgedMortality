@@ -8,10 +8,11 @@ namespace PVA_AgedMortality
 {
     public class MathFunctions
     {
-        Random rnd = new Random();
+        static Random rnd = new Random();
+
         public static bool CoinFlip(double prob) //function for outcome simulation for binary events (AMR/stable, life/death, birth/no birth) 
         {
-            Random rnd = new Random();
+
             if (rnd.NextDouble() < prob) //if random number is less than your probability, event happened 
             {
                 return true;

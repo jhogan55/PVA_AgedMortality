@@ -16,8 +16,13 @@ namespace PVA_AgedMortality
         {
             bool amr = AmrStatus();
             Population.MonthlySurvivalTest(p, amr); //Test survival of each individual 
-            Population.MonthlyIndChanges(p); //Make all individual-level changes for the month: age, pregnancy duration,  
-            Population.RemoveInfantID(Population.weanedInf, p); //Remove infant dependencies from mothers 
+            Population.MonthlyIndChanges(p); //Make all individual-level changes for the month: age, pregnancy duration,
+            foreach (Ind i in Population.newFemInf) //Add any new female infants to your population 
+            {
+                p.Add(i);
+            }
+            Population.newFemInf.Clear(); //reset the female infant list 
+            Population.RemoveWeanedFem(Population.weanedInf, p); //Remove infant dependencies from mothers 
         }
 
         //Method: determine if 1) an amr occurs, 2) if you are in a post-amr risk period 
@@ -28,7 +33,7 @@ namespace PVA_AgedMortality
             {
                 Trial.TimeSinceAmr = 0; //it has been 0 months since the last takeover 
                 Trial.TrialAmrs++;
-                //MessageBox.Show("AMR RISK: occurred this month, time since AMR = " + Trial.TimeSinceAmr + " months.");
+                //MessageBox.Show("AMR RISK: occurred this month");
                 return true;
             }
             else

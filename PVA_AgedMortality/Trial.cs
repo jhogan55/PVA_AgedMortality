@@ -10,7 +10,8 @@ namespace PVA_AgedMortality
     public class Trial
     {
         private static int timeSinceAmr;
-        private static int trialBirths;
+        private static int trialFemBirths;
+        private static int trialMaleBirths;
         private static int trialDeaths;
         private static int trialAmrs;
         public static int TimeSinceAmr
@@ -18,10 +19,16 @@ namespace PVA_AgedMortality
             get { return timeSinceAmr; }
             set { timeSinceAmr = value; }
         }
-        public static int TrialBirths
+        public static int TrialFemBirths
         {
-            get { return trialBirths; }
-            set { trialBirths = value; }
+            get { return trialFemBirths; }
+            set { trialFemBirths = value; }
+        }
+
+        public static int TrialMaleBirths
+        {
+            get { return trialMaleBirths; }
+            set { trialMaleBirths = value; }
         }
         public static int TrialDeaths
         {
@@ -37,7 +44,8 @@ namespace PVA_AgedMortality
         public static void SingleTrial(int m, Population p)
         {
             TimeSinceAmr = VitalRates.AMRRISKPERIOD; //reset amr counter at start of each trial to NOT be under amr risk 
-            TrialBirths = 0;
+            TrialFemBirths = 0;
+            TrialMaleBirths = 0;
             TrialDeaths = 0;
             TrialAmrs = 0;
             for (int i = 0; i < m; i++)
@@ -45,7 +53,8 @@ namespace PVA_AgedMortality
                 //MessageBox.Show("Month " + (i+1) + " of " + m);
                 Month.SingleMonth(p);
             }
-            MessageBox.Show("End of trial. Ending population: " + p.Count + ". Amrs: " + TrialAmrs + ", Births: " + TrialBirths + " Deaths: " + TrialDeaths);
+
+            //MessageBox.Show("End of trial. Ending population: " + p.Count + ". Amrs: " + TrialAmrs + ", infant females born: " + TrialFemBirths + ", infant males born: " + TrialMaleBirths + " Deaths: " + TrialDeaths);
         }
     }
 }

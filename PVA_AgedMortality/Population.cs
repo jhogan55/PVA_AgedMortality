@@ -11,7 +11,7 @@ namespace PVA_AgedMortality
     {
         //private list 
         public static List<int> weanedInf = new List<int>();
-
+        public static Population newFemInf = new Population();
         //Constructor (default for now) 
         public Population ()
         {
@@ -31,17 +31,17 @@ namespace PVA_AgedMortality
 
 
         //Infant female has weaned, no longer associated with mother. Population-level method because it involves 2 different individuals  
-        public static void RemoveInfantID(List<int> weaned, Population p)  
+        public static void RemoveWeanedFem(List<int> weaned, Population p)  
         {
             foreach (int infID in weaned) //for every ID stored in weaned list 
             {
                 foreach (Ind i in p) //find every matching individual 
                 {
-                    if (i.ReturnInfID() == infID) 
+                    if (i.DepInfID == infID) 
                     {
-                        //MessageBox.Show("Mother ID = " + i.ReturnID() + " Dep inf ID = " + i.ReturnInfID());
-                        i.ResetDepFem();
-                    } //reset depInf to 0;                     
+                        //MessageBox.Show("Dep inf ID = " + i.DepInfID + " weaned, removing dependency");
+                        i.ResetDepFem();//reset depInf to 0;  
+                    }                    
                 }              
             }
             weaned.Clear(); //empty list after every run 
@@ -66,31 +66,40 @@ namespace PVA_AgedMortality
             foreach (Ind i in p) //check survival for each individual in pop 
             {
                 
-                bool survivedMonth = Ind.IndSurvTest(i.ReturnAge(), amr); 
+                bool survivedMonth = Ind.IndSurvTest(i.Age, amr); 
                 if (survivedMonth == false) //individual died 
                 {
-                    deadInd.Add(i.ReturnID()); //add individual's ID to the death list 
+                    deadInd.Add(i.IndID); //add individual's ID to the death list 
                     Trial.TrialDeaths++;  //increment death counter 
-                    MessageBox.Show("Ind " + i.DisplayIndInPop() + " months old, died. Removing from population"); //debugging message 
+                    //MessageBox.Show("Ind " + i.DisplayIndInPop() + " months old, died. Removing from population"); 
                 }
-                bool maleInfSurv = Ind.IndSurvTest(i.ReturnDepMaleAge(), amr);
+                bool maleInfSurv = Ind.IndSurvTest(i.DepMaleAge, amr);
                 if (maleInfSurv == false)
                 {
                     i.ResetDepMale();
+                    i.PrevInfSurv = false; //mom lost baby, so goes on shortened IBI path 
+                    Trial.TrialDeaths++;
+                    //MessageBox.Show("Infant male of female " + i.IndID + " died, now on short IBI path " + i.PrevInfSurv);
                 }
             } //end of foreach loop of population
             foreach (int j in deadInd) //for all dead inds, remove them from population. Also remove dependent infants 
             {
-                p.RemoveAll(Ind => Ind.ReturnID() == j); //remove individuals who died 
+                p.RemoveAll(Ind => Ind.IndID == j); //remove individuals who died 
                 foreach (Ind i in p) //foreach loop to find any dependent infants who are going to be removed, used to increment trial death counter only  
                 {
-                    if(i.ReturnMotherID() == j) //if your mom is on the death list you are dead 
+                    if(i.DepInfID == j) //dependent female infant was killed
+                    {
+                        i.PrevInfSurv = false; //mom goes on the shortenend IBI path 
+                        i.ResetDepFem(); //no infant association for mom anymore 
+                        //MessageBox.Show("Infant fenale lost, ID# " + j + ", mom ID# " + i.IndID + " now on short IBI path " + i.PrevInfSurv);
+                    }
+                    if(i.MotherID == j) //if your mom is on the death list you are dead 
                     {
                         Trial.TrialDeaths++; //count as a death statistic 
-                        MessageBox.Show("Dependent infant " + i.DisplayIndInPop() + " months old, lost mother (ID " + i.ReturnMotherID() + "), removed from population");
+                       // MessageBox.Show("Dependent infant " + i.DisplayIndInPop() + " months old, lost mother (ID " + i.MotherID + "), removed from population");
                     }
                 }
-                p.RemoveAll(Ind => Ind.ReturnMotherID() == j); //remove dependent infants of individuals who died 
+                p.RemoveAll(Ind => Ind.MotherID == j); //remove dependent infants of individuals who died 
             }
             return p;
         }

@@ -19,53 +19,61 @@ namespace PVA_AgedMortality
         int depMaleAge; //keep track of age of male infant, drop once weaned 
         int depInfID; //while a mother w/dependent infant, keep track of infant ID (used to establish fertility pathway, based on if infant dies or not) 
         int motherID; //while infant, keep track of mother's ID (if mother dies, infant dies too) 
+        bool prevInfSurv; //keep track of whether the last infant survived to wean or not. Changes fertility down the road 
         private static int idCount = 1; //counter used to provide ID number 
 
         //public properties 
-        int IndID
+        public int IndID
         {
             get { return indID; }
             set { indID = value; } //TODO: Data validation. And should the idCount++ be moved here? 
         }
-        int Age
+        public int Age
         {
             get { return age; }
             set { age = value; } //TODO: data validation 
         }
-        bool IsPreg
+        public bool IsPreg
         {
             get { return isPreg; }
             set { isPreg = value; } //TODO: data validation 
         }
-        int MonthsPreg
+        public int MonthsPreg
         {
             get { return monthsPreg; }
             set { monthsPreg = value; } //TODO: data validation, pregnancy can only last 6 months 
         }
-        bool DepMaleInf
+        public bool DepMaleInf
         {
             get { return depMaleInf; }
             set { depMaleInf = value; } //TODO: data validation 
         }
-        int DepMaleAge
+        public int DepMaleAge
         {
             get { return depMaleAge; }
             set { depMaleAge = value; } //TODO: data validation, should never exceed DEPENDENCY constant  
         }
-        int DepInfID
+        public int DepInfID
         {
             get { return depInfID; }
             set { depInfID = value; } //TODO: data validation, dep infant should only last for 12 months 
         }
-        int MotherID
+        public int MotherID
         {
             get { return motherID; }
             set { motherID = value; } //TODO: data validation, mother ID should only last for 12 months 
         }
-        int MonthsSinceBirth
+
+        public int MonthsSinceBirth
         {
             get { return monthsSinceBirth; }
             set { monthsSinceBirth = value; } //TODO: data validation, months since birth should never exceed X years  
+        }
+
+        public bool PrevInfSurv
+        {
+            get { return prevInfSurv; }
+            set { prevInfSurv = value; } //TODO: data validation 
         }
 
         //default constructor
@@ -75,7 +83,7 @@ namespace PVA_AgedMortality
         }
 
         //constructor for a new ind
-        public Ind(int mAge, bool preg, int mPreg, bool maleBaby, int maleAge, int depInf, int mom, int mSinceBirth)
+        public Ind(int mAge, bool preg, int mPreg, bool maleBaby, int maleAge, int depInf, int mom, int mSinceBirth, bool infSurv)
         {
             IndID = idCount;
             idCount++;
@@ -87,6 +95,7 @@ namespace PVA_AgedMortality
             DepInfID = depInf;
             MotherID = mom;
             MonthsSinceBirth = mSinceBirth;
+            PrevInfSurv = infSurv;
         }
 
         //methods
@@ -108,6 +117,7 @@ namespace PVA_AgedMortality
             bool survived = MathFunctions.CoinFlip(VitalRates.MonthlySurvival(i, amr)); //if true, individual passed the survival test 
             return survived; 
         }
+
         //Remove dependency between mother and infant. Store female infant ID to remove from mother at population-level 
         public void InfantDependencyTest()
         {
@@ -119,14 +129,15 @@ namespace PVA_AgedMortality
             if (DepMaleAge == VitalRates.DEPENDENCYLENGTH) //mothers lose their male infant dependency, but there is no male in pop to clean up 
             {
                 ResetDepMale();
+                //MessageBox.Show("Male infant weaned, no longer dependent. " + DepMaleInf + PrevInfSurv);
             }
         }
         public void ChanceToConceive()
         {
             if (!isPreg) //Only non-pregnant individuals can get pregnant 
             {
-                isPreg = MathFunctions.CoinFlip(VitalRates.ConceptionRate(Age));
-                if (isPreg) MessageBox.Show("Pregnant female! Ind " + ReturnID());
+                isPreg = MathFunctions.CoinFlip(VitalRates.ConceptionRate(Age, MonthsSinceBirth, PrevInfSurv));
+                //if (isPreg) MessageBox.Show("Pregnant female! Ind " + IndID);
                 //TODO: build in MonthsSincePreg and LastInfKilled for differentiated fertility rates 
             }
         }
@@ -145,22 +156,23 @@ namespace PVA_AgedMortality
         //Female has been pregnant for GESTATION LENGTH, so reset pregnancy variables, give birth. If baby female, create new ind. 
         public void GiveBirth()
         {
-            IsPreg = false; //reset isPreg flag 
-            MonthsPreg = 0; //reset MonthsPreg counter
-            MonthsSinceBirth = 0; //reset "months since birth" counter 
+            IsPreg = false; //ind gives birth and is no longer pregnant, reset flag 
+            MonthsPreg = 0; //reset MonthsPreg counter to 0 
+            MonthsSinceBirth = 0; //reset "months since birth" counter to 0
+            PrevInfSurv = true; //this baby is born and alive 
             if (MathFunctions.CoinFlip(VitalRates.SEXRATIO)) //determine sex of infant. TRUE is female, so create a new ind in population  
             {
                 DepInfID = idCount; //link female to mother 
-                Ind baby = new Ind(0, false, 0, false, 0, 0, IndID, 0); //create new baby
-                //TODO: ADD THIS NEW BABY TO POPULATION!!! 
-                MessageBox.Show("New female infant born, ID# " + baby.IndID + " , mother is #" + baby.MotherID);
-                Trial.TrialBirths++;
+                Ind baby = new Ind(0, false, 0, false, 0, 0, IndID, 0, true); //create new baby 
+                Population.newFemInf.Add(baby); //add to the new baby collection for the month 
+                //MessageBox.Show("New female infant born, ID# " + baby.IndID + " , mother is #" + baby.MotherID);
+                Trial.TrialFemBirths++;
             }
             else //male baby
             {
                 DepMaleInf = true;
-                MessageBox.Show("Male baby born to mother " + IndID);
-                //TODO: do we want to include male births in the trial birth count? If so, also include male baby deaths in trial death count
+                //MessageBox.Show("Male baby born to mother " + IndID);
+                Trial.TrialMaleBirths++;
             }
         }
         //Clone ind, used to keep starter population separate from tested pop 
@@ -176,6 +188,7 @@ namespace PVA_AgedMortality
             clonedInd.DepMaleAge = i.DepMaleAge;
             clonedInd.DepInfID = i.DepInfID;
             clonedInd.MotherID = i.MotherID;
+            clonedInd.PrevInfSurv = i.PrevInfSurv;
             return clonedInd;
         }        
         //String override for list box
@@ -191,14 +204,7 @@ namespace PVA_AgedMortality
             }
             else return IndID + ", " + Age + " months old, dependent infant #" + DepInfID ;
         }
-        public int ReturnID()
-        {
-            return IndID;
-        }
-         public int ReturnMotherID()
-        {
-            return MotherID;
-        }
+
         public void ResetDepFem()
         {
             DepInfID = 0;
@@ -209,18 +215,6 @@ namespace PVA_AgedMortality
             DepMaleInf = false;
             DepMaleAge = 0;
             //MessageBox.Show("Male infant is weaned, no longer dependent");
-        }
-        public int ReturnDepMaleAge()
-        {
-            return DepMaleAge;
-        }
-        public int ReturnAge()
-        {
-            return DepMaleAge;
-        }
-        public int ReturnInfID()
-        {
-            return DepInfID;
         }
     }
 }
