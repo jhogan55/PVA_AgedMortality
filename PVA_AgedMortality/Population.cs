@@ -73,14 +73,18 @@ namespace PVA_AgedMortality
                     Trial.TrialDeaths++;  //increment death counter 
                     //MessageBox.Show("Ind " + i.DisplayIndInPop() + " months old, died. Removing from population"); 
                 }
-                bool maleInfSurv = Ind.IndSurvTest(i.DepMaleAge, amr);
-                if (maleInfSurv == false)
+                if (i.DepMaleInf) //if you have a dep male infant, test its mortality 
                 {
-                    i.ResetDepMale();
-                    i.PrevInfSurv = false; //mom lost baby, so goes on shortened IBI path 
-                    Trial.TrialDeaths++;
-                    //MessageBox.Show("Infant male of female " + i.IndID + " died, now on short IBI path " + i.PrevInfSurv);
+                    bool maleInfSurv = Ind.IndSurvTest(i.DepMaleAge, amr); //
+                    if (maleInfSurv == false)
+                    {
+                        i.ResetDepMale();
+                        i.PrevInfSurv = false; //mom lost baby, so goes on shortened IBI path 
+                        Trial.TrialDeaths++;
+                        //MessageBox.Show("Infant male of female " + i.IndID + " died, now on short IBI path ");
+                    }
                 }
+                
             } //end of foreach loop of population
             foreach (int j in deadInd) //for all dead inds, remove them from population. Also remove dependent infants 
             {
@@ -91,7 +95,7 @@ namespace PVA_AgedMortality
                     {
                         i.PrevInfSurv = false; //mom goes on the shortenend IBI path 
                         i.ResetDepFem(); //no infant association for mom anymore 
-                        //MessageBox.Show("Infant fenale lost, ID# " + j + ", mom ID# " + i.IndID + " now on short IBI path " + i.PrevInfSurv);
+                        //MessageBox.Show("Infant female lost, ID# " + j + ", mom ID# " + i.IndID + " now on short IBI path " + i.PrevInfSurv);
                     }
                     if(i.MotherID == j) //if your mom is on the death list you are dead 
                     {

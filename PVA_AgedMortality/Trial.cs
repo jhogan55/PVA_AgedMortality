@@ -54,7 +54,7 @@ namespace PVA_AgedMortality
                 Month.SingleMonth(p);
             }
 
-            //MessageBox.Show("End of trial. Ending population: " + p.Count + ". Amrs: " + TrialAmrs + ", infant females born: " + TrialFemBirths + ", infant males born: " + TrialMaleBirths + " Deaths: " + TrialDeaths);
+            MessageBox.Show("End of trial. Ending population: " + p.Count + ". Amrs: " + TrialAmrs + ", infant females born: " + TrialFemBirths + ", infant males born: " + TrialMaleBirths + " Deaths: " + TrialDeaths);
         }
     }
 }
