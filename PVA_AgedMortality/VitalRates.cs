@@ -94,7 +94,7 @@ namespace PVA_AgedMortality
         }
 
         //determine an individual's chance of conception, based on time since last infant and status of previous infant 
-        public static double ConceptionRate(int age, int monthsSinceBirth, bool lastInfSurv )
+        public static double ConceptionRate(int age, int mSinceBirthDeath, bool lastInfSurv )
         {
             double repMean;
             if (age < 60) { repMean = 0; } //infants and juvies don't reproduce 
@@ -103,45 +103,48 @@ namespace PVA_AgedMortality
                 //check whether IBI is following surviving or lost infant 
                 if (lastInfSurv) //"normal" length IBI
                 {
-                    if (monthsSinceBirth < 4) repMean = 0; //less than 4 months no chance to reproduce
-                    else if (monthsSinceBirth >= 4 & monthsSinceBirth <= 6) repMean = 0.007; //4 to 6 months <1%
-                    else if (monthsSinceBirth > 6 & monthsSinceBirth <= 9) repMean = 0.013; //7 to 9 ~1%
-                    else if (monthsSinceBirth > 9 & monthsSinceBirth <= 11) repMean = 0.020; //10, 11 months ~2%
-                    else if (monthsSinceBirth == 12) repMean = 0.059; //at 12 months curve starts to ramp up, now ~6%
-                    else if (monthsSinceBirth == 13) repMean = 0.098; //~10% 
-                    else if (monthsSinceBirth == 14) repMean = 0.170; //~17%
-                    else if (monthsSinceBirth == 15) repMean = 0.216; //
-                    else if (monthsSinceBirth == 16) repMean = 0.268; //
-                    else if (monthsSinceBirth == 17) repMean = 0.307; //
-                    else if (monthsSinceBirth == 18) repMean = 0.399; //
-                    else if (monthsSinceBirth == 19) repMean = 0.477; //
-                    else if (monthsSinceBirth == 20) repMean = 0.542; // now more likely than not to get pregnant if not already
-                    else if (monthsSinceBirth == 21) repMean = 0.601; //
-                    else if (monthsSinceBirth == 22) repMean = 0.673; //
-                    else if (monthsSinceBirth == 23) repMean = 0.752; //
-                    else if (monthsSinceBirth == 24) repMean = 0.784; //
-                    else if (monthsSinceBirth == 25 | monthsSinceBirth == 26) repMean = 0.824; //
-                    else repMean = 0.889; //the odds are good enough there's really not a need to ramp up any further 
+                    if (mSinceBirthDeath < 5) repMean = 0; //less than 4 months no chance to reproduce
+                    else if (mSinceBirthDeath >= 5 & mSinceBirthDeath < 12 ) repMean = 0.007; //5 to 12 months < 1% per month
+                    else if (mSinceBirthDeath == 13) repMean = 0.040; //~10% 
+                    else if (mSinceBirthDeath == 14) repMean = 0.042; //~17%
+                    else if (mSinceBirthDeath == 15) repMean = 0.080; //
+                    else if (mSinceBirthDeath == 16) repMean = 0.055; //
+                    else if (mSinceBirthDeath == 17) repMean = 0.067; //
+                    else if (mSinceBirthDeath == 18) repMean = 0.054; //
+                    else if (mSinceBirthDeath == 19) repMean = 0.132; //
+                    else if (mSinceBirthDeath == 20) repMean = 0.130; // now more likely than not to get pregnant if not already
+                    else if (mSinceBirthDeath == 21) repMean = 0.125; //
+                    else if (mSinceBirthDeath == 22) repMean = 0.129; //
+                    else if (mSinceBirthDeath == 23) repMean = 0.180; //
+                    else if (mSinceBirthDeath == 24) repMean = 0.240; //
+                    else if (mSinceBirthDeath == 25) repMean = 0.132; //
+                    else if (mSinceBirthDeath == 26) repMean = 0.182; //
+                    else if (mSinceBirthDeath == 27) repMean = 0.185; // real data is 0, split 28 month value into two months (0.370)
+                    else if (mSinceBirthDeath == 28) repMean = 0.185; //
+                    else if (mSinceBirthDeath == 29) repMean = 0.118; //
+                    else if (mSinceBirthDeath == 30) repMean = 0.200; //
+                    else if (mSinceBirthDeath == 31) repMean = 0.250; //
+                    else if (mSinceBirthDeath == 32) repMean = 0.444; //
+                    else if (mSinceBirthDeath == 33) repMean = 0.200; //
+                    else if (mSinceBirthDeath == 34) repMean = 0.250; //
+                    else if (mSinceBirthDeath == 35) repMean = 0.200; //no females conceived at 35 months, averaged over 34-36 mo
+                    else repMean = 0.200; //by 36 months only 3/150 females had not conceived (and these were likely "lost pregnancies")
                 }
                 else //LastInfSurv = false, the previous infant died so shorter IBI curve
                 {
-                    if (monthsSinceBirth == 0) repMean = 0.0375; //small chance right off the bat
-                    else if (monthsSinceBirth == 1) repMean = 0.01; //
-                    else if (monthsSinceBirth == 2) repMean = 0.188; //at 2 months curve jumps big time, ~20% conception chance 
-                    else if (monthsSinceBirth == 3) repMean = 0.238; // 
-                    else if (monthsSinceBirth == 4) repMean = 0.350; //
-                    else if (monthsSinceBirth == 5) repMean = 0.450; //
-                    else if (monthsSinceBirth == 6) repMean = 0.550; //most females are pregnant within 6 months of losing an infant 
-                    else if (monthsSinceBirth == 7) repMean = 0.588; //
-                    else if (monthsSinceBirth == 8) repMean = 0.613; //
-                    else if (monthsSinceBirth == 9) repMean = 0.650; //
-                    else if (monthsSinceBirth == 10) repMean = 0.675; // 
-                    else if (monthsSinceBirth == 11) repMean = 0.750; //
-                    else if (monthsSinceBirth == 12) repMean = 0.775; //
-                    else if (monthsSinceBirth == 13) repMean = 0.800; //
-                    else if (monthsSinceBirth == 14) repMean = 0.838; //
-                    else if (monthsSinceBirth == 15) repMean = 0.863; //
-                    else repMean = 0.875; //Infant-lost IBI stalls for a while but this is probably high enough 
+                    if (mSinceBirthDeath == 0) repMean = 0; //just lost your baby, no conception chance 
+                    else if (mSinceBirthDeath == 1) repMean = 0.0685; //small chance after 1 month
+                    else if (mSinceBirthDeath == 2) repMean = 0.118; //
+                    else if (mSinceBirthDeath == 3) repMean = 0.200; //~3 months after losing infant you start to have better odds 
+                    else if (mSinceBirthDeath == 4) repMean = 0.271; // 
+                    else if (mSinceBirthDeath == 5) repMean = 0.143; //
+                    else if (mSinceBirthDeath == 6) repMean = 0.333; //
+                    else if (mSinceBirthDeath == 7) repMean = 0.300; // 
+                    else if (mSinceBirthDeath == 8) repMean = 0.071; //weird dip in the data, probably just noise 
+                    else if (mSinceBirthDeath == 9) repMean = 0.308; //
+                    else if (mSinceBirthDeath == 10) repMean = 0.111; //
+                    else if (mSinceBirthDeath == 11) repMean = 0.375; // 
+                    else repMean = 0.300; //Infant-lost IBI stalls for a while but this is probably high enough 
                 };
             }
             return repMean;

@@ -14,7 +14,7 @@ namespace PVA_AgedMortality
         int age; //age in months
         bool isPreg; //whether ind is pregnant or not 
         int monthsPreg; //how many months has ind been pregnant
-        int monthsSinceBirth; //how many months since ind last gave birth
+        int monthsSinceBirthOrInfDeath; //how many months since ind last gave birth
         bool depMaleInf; //keep track of dependent male infants (used to establish fertility pathway, if baby dies early)
         int depMaleAge; //keep track of age of male infant, drop once weaned 
         int depInfID; //while a mother w/dependent infant, keep track of infant ID (used to establish fertility pathway, based on if infant dies or not) 
@@ -64,10 +64,10 @@ namespace PVA_AgedMortality
             set { motherID = value; } //TODO: data validation, mother ID should only last for 12 months 
         }
 
-        public int MonthsSinceBirth
+        public int MonthsSinceBirthOrInfDeath
         {
-            get { return monthsSinceBirth; }
-            set { monthsSinceBirth = value; } //TODO: data validation, months since birth should never exceed X years  
+            get { return monthsSinceBirthOrInfDeath; }
+            set { monthsSinceBirthOrInfDeath = value; } //TODO: data validation, months since birth should never exceed X years  
         }
 
         public bool PrevInfSurv
@@ -94,7 +94,7 @@ namespace PVA_AgedMortality
             DepMaleAge = maleAge;
             DepInfID = depInf;
             MotherID = mom;
-            MonthsSinceBirth = mSinceBirth;
+            MonthsSinceBirthOrInfDeath = mSinceBirth;
             PrevInfSurv = infSurv;
         }
 
@@ -106,7 +106,7 @@ namespace PVA_AgedMortality
         {
             Age++; //ind is one month older 
             if (DepMaleInf) DepMaleAge++;
-            MonthsSinceBirth++;
+            MonthsSinceBirthOrInfDeath++;
             CheckPreg();
             InfantDependencyTest(); //check if ind is an infant who has reached weaning. If so, drop motherID 
         }
@@ -136,7 +136,7 @@ namespace PVA_AgedMortality
         {
             if (!isPreg) //Only non-pregnant individuals can get pregnant 
             {
-                isPreg = MathFunctions.CoinFlip(VitalRates.ConceptionRate(Age, MonthsSinceBirth, PrevInfSurv));
+                isPreg = MathFunctions.CoinFlip(VitalRates.ConceptionRate(Age, MonthsSinceBirthOrInfDeath, PrevInfSurv));
                 //if (isPreg) MessageBox.Show("Pregnant female! Ind " + IndID);
                 //TODO: build in MonthsSincePreg and LastInfKilled for differentiated fertility rates 
             }
@@ -158,7 +158,7 @@ namespace PVA_AgedMortality
         {
             IsPreg = false; //ind gives birth and is no longer pregnant, reset flag 
             MonthsPreg = 0; //reset MonthsPreg counter to 0 
-            MonthsSinceBirth = 0; //reset "months since birth" counter to 0
+            MonthsSinceBirthOrInfDeath = 0; //reset "months since birth" counter to 0
             PrevInfSurv = true; //this baby is born and alive 
             if (MathFunctions.CoinFlip(VitalRates.SEXRATIO)) //determine sex of infant. TRUE is female, so create a new ind in population  
             {
@@ -183,7 +183,7 @@ namespace PVA_AgedMortality
             clonedInd.Age = i.Age;
             clonedInd.IsPreg = i.IsPreg;
             clonedInd.MonthsPreg = i.MonthsPreg;
-            clonedInd.MonthsSinceBirth = i.MonthsSinceBirth;
+            clonedInd.MonthsSinceBirthOrInfDeath = i.MonthsSinceBirthOrInfDeath;
             clonedInd.DepMaleInf = i.DepMaleInf;
             clonedInd.DepMaleAge = i.DepMaleAge;
             clonedInd.DepInfID = i.DepInfID;

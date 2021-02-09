@@ -79,6 +79,7 @@ namespace PVA_AgedMortality
                     if (maleInfSurv == false)
                     {
                         i.ResetDepMale();
+                        i.MonthsSinceBirthOrInfDeath = 0; //time of significance is now since death not birth 
                         i.PrevInfSurv = false; //mom lost baby, so goes on shortened IBI path 
                         Trial.TrialDeaths++;
                         //MessageBox.Show("Infant male of female " + i.IndID + " died, now on short IBI path ");
@@ -91,9 +92,10 @@ namespace PVA_AgedMortality
                 p.RemoveAll(Ind => Ind.IndID == j); //remove individuals who died 
                 foreach (Ind i in p) //foreach loop to find any dependent infants who are going to be removed, used to increment trial death counter only  
                 {
-                    if(i.DepInfID == j) //dependent female infant was killed
+                    if(i.DepInfID == j) //dependent female infant was killed so adjust mom's properties 
                     {
-                        i.PrevInfSurv = false; //mom goes on the shortenend IBI path 
+                        i.PrevInfSurv = false; //mom goes on the shortenend IBI path
+                        i.MonthsSinceBirthOrInfDeath = 0; //time of significance is now since death not birth
                         i.ResetDepFem(); //no infant association for mom anymore 
                         //MessageBox.Show("Infant female lost, ID# " + j + ", mom ID# " + i.IndID + " now on short IBI path " + i.PrevInfSurv);
                     }
