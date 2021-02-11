@@ -28,7 +28,7 @@ namespace PVA_AgedMortality
         //Method: determine if 1) an amr occurs, 2) if you are in a post-amr risk period 
         private static bool AmrStatus()
         {
-            bool amrOccur = MathFunctions.CoinFlip(VitalRates.AMRRATE); //determine if AMR occured this month. 
+            bool amrOccur = MathFunctions.CoinFlip(VitalRates.amrRate); //determine if AMR occured this month. 
             if (amrOccur) //amrOccured: reset amrRisk counter to 0
             {
                 Trial.TimeSinceAmr = 0; //it has been 0 months since the last takeover 

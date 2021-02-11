@@ -41,6 +41,9 @@ namespace PVA_AgedMortality
             this.btnDefault = new System.Windows.Forms.Button();
             this.lstTrialResults = new System.Windows.Forms.ListBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.btnBeta = new System.Windows.Forms.Button();
+            this.txtAmrRate = new System.Windows.Forms.TextBox();
+            this.lblAmrRate = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -112,7 +115,7 @@ namespace PVA_AgedMortality
             // btnAdd
             // 
             this.btnAdd.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnAdd.Location = new System.Drawing.Point(16, 290);
+            this.btnAdd.Location = new System.Drawing.Point(27, 214);
             this.btnAdd.Name = "btnAdd";
             this.btnAdd.Size = new System.Drawing.Size(145, 67);
             this.btnAdd.TabIndex = 7;
@@ -127,7 +130,7 @@ namespace PVA_AgedMortality
             this.lstStartPop.ItemHeight = 15;
             this.lstStartPop.Location = new System.Drawing.Point(178, 37);
             this.lstStartPop.Name = "lstStartPop";
-            this.lstStartPop.Size = new System.Drawing.Size(248, 319);
+            this.lstStartPop.Size = new System.Drawing.Size(248, 244);
             this.lstStartPop.TabIndex = 8;
             // 
             // btnDefault
@@ -144,7 +147,7 @@ namespace PVA_AgedMortality
             // lstTrialResults
             // 
             this.lstTrialResults.FormattingEnabled = true;
-            this.lstTrialResults.Location = new System.Drawing.Point(501, 12);
+            this.lstTrialResults.Location = new System.Drawing.Point(517, 13);
             this.lstTrialResults.Name = "lstTrialResults";
             this.lstTrialResults.Size = new System.Drawing.Size(288, 472);
             this.lstTrialResults.TabIndex = 10;
@@ -160,16 +163,48 @@ namespace PVA_AgedMortality
             this.groupBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
             this.groupBox1.Location = new System.Drawing.Point(12, 12);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(447, 377);
+            this.groupBox1.Size = new System.Drawing.Size(447, 287);
             this.groupBox1.TabIndex = 11;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Starting Population Characteristics";
+            // 
+            // btnBeta
+            // 
+            this.btnBeta.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnBeta.Location = new System.Drawing.Point(392, 413);
+            this.btnBeta.Name = "btnBeta";
+            this.btnBeta.Size = new System.Drawing.Size(115, 67);
+            this.btnBeta.TabIndex = 12;
+            this.btnBeta.Text = "&Sample Beta";
+            this.btnBeta.UseVisualStyleBackColor = true;
+            this.btnBeta.Click += new System.EventHandler(this.btnBeta_Click);
+            // 
+            // txtAmrRate
+            // 
+            this.txtAmrRate.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
+            this.txtAmrRate.Location = new System.Drawing.Point(15, 354);
+            this.txtAmrRate.Name = "txtAmrRate";
+            this.txtAmrRate.Size = new System.Drawing.Size(93, 26);
+            this.txtAmrRate.TabIndex = 13;
+            // 
+            // lblAmrRate
+            // 
+            this.lblAmrRate.AutoSize = true;
+            this.lblAmrRate.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblAmrRate.Location = new System.Drawing.Point(114, 360);
+            this.lblAmrRate.Name = "lblAmrRate";
+            this.lblAmrRate.Size = new System.Drawing.Size(77, 20);
+            this.lblAmrRate.TabIndex = 14;
+            this.lblAmrRate.Text = "AMR rate";
             // 
             // frmPvaFront
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(817, 497);
+            this.Controls.Add(this.lblAmrRate);
+            this.Controls.Add(this.txtAmrRate);
+            this.Controls.Add(this.btnBeta);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.lstTrialResults);
             this.Controls.Add(this.lblTrials);
@@ -200,6 +235,9 @@ namespace PVA_AgedMortality
         private System.Windows.Forms.Button btnDefault;
         private System.Windows.Forms.ListBox lstTrialResults;
         private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.Button btnBeta;
+        private System.Windows.Forms.TextBox txtAmrRate;
+        private System.Windows.Forms.Label lblAmrRate;
     }
 }
 

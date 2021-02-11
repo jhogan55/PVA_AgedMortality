@@ -13,7 +13,8 @@ namespace PVA_AgedMortality
         public const int GESTATIONLENGTH = 6;
         public const int DEPENDENCYLENGTH = 12;
         public const int AMRRISKPERIOD = 6;
-        public const double AMRRATE = 0.03;
+        public const double DEFAULTAMRRATE = 0.03;
+        public static double amrRate;
         public const double INFAMR_A = 21.24997; //These are calculated from Fernando's maximum likelihood bayes method, and represent MORTALITY not SURVIVAL.
         public const double INFAMR_B = 103.83494; //they are A and B values used for sampling from a beta distribution
         public const double INFSTB_MEAN = 0.969926; //mean survival of infants during stable periods
@@ -43,15 +44,14 @@ namespace PVA_AgedMortality
             {
                 if (amr)
                 {
-                    monthSurvRate =( 1 - (MathFunctions.SampleBeta(INFAMR_A, INFAMR_B)));
+                    monthSurvRate = ( 1 - (MathFunctions.SampleBeta(INFAMR_A, INFAMR_B)));
                     //MessageBox.Show("Sampled from beta during AMR, retrieved value: " + monthSurvRate);
                 }
                 else //stable period, better survival 
                 {
-                    monthSurvRate = ( 1 - (MathFunctions.SampleBeta(INFSTB_A, INFSTB_B)));
+                    //monthSurvRate = (1 - (MathFunctions.SampleBeta(INFSTB_A, INFSTB_B)));
+                    monthSurvRate = INFSTB_MEAN;
                     //MessageBox.Show("Sampled from beta during STABLE period, retrieved value: " + monthSurvRate);
-                    //monthSurvRate = 0.969926;
-                    //MessageBox.Show("Ind is infant, no AMR period. Survival rate: " + monthSurvRate);
                 }
             }//beta sample infant mortality and AMR risk }
 
