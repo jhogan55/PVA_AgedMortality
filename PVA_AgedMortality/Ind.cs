@@ -20,7 +20,7 @@ namespace PVA_AgedMortality
         int depInfID; //while a mother w/dependent infant, keep track of infant ID (used to establish fertility pathway, based on if infant dies or not) 
         int motherID; //while infant, keep track of mother's ID (if mother dies, infant dies too) 
         bool prevInfSurv; //keep track of whether the last infant survived to wean or not. Changes fertility down the road 
-        private static int idCount = 1; //counter used to provide ID number 
+        public static int idCount = 1; //counter used to provide ID number 
 
         //public properties 
         public int IndID
@@ -196,13 +196,13 @@ namespace PVA_AgedMortality
         {
             if (DepMaleInf)
             {
-                return IndID + ", " + Age + " months old, dependent male infant";
+                return IndID + ", " + Age + " months old, dep inf male";
             }
             else if (DepInfID == 0)
             {
                 return IndID + ", " + Age + " months old";
             }
-            else return IndID + ", " + Age + " months old, dependent infant #" + DepInfID ;
+            else return IndID + ", " + Age + " months old, dep inf #" + DepInfID ;
         }
 
         public void ResetDepFem()
