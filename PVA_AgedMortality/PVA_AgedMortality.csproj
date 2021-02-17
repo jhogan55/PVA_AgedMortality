@@ -46,6 +46,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BCstarterPop.cs" />
+    <Compile Include="RMstarterPop.cs" />
     <Compile Include="LVstarterPop.cs" />
     <Compile Include="MathFunctions.cs" />
     <Compile Include="Month.cs" />

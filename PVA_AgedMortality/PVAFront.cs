@@ -27,8 +27,19 @@ namespace PVA_AgedMortality
             InitializeComponent();
             txtTrials.Text = Convert.ToString(3); //form loads, insert default values into text boxes 
             txtYears.Text = Convert.ToString(1);
-            txtAge.Text = Convert.ToString(1);
-            txtAmrRate.Text = Convert.ToString(VitalRates.DEFAULTAMRRATE); 
+            txtAmrRate.Text = Convert.ToString(VitalRates.DEFAULTAMRRATE);
+            SelectPop();
+        }
+
+        //Creates your starting pop from 3 default options (BC, LV, RM) of different sizes 
+        private void SelectPop()
+        {
+            Ind.idCount = 1; //ID counter needs to be reset, this should probably be somewhere else though. 
+            startingPop.Clear(); //empty population 
+            if (rdoBC.Checked) startingPop = BCstarterPop.DefaultPop(); //BC chosen 
+            else if (rdoLV.Checked) startingPop = LVstarterPop.DefaultPop(); //LV chosen
+            else startingPop = RMstarterPop.DefaultPop(); //RM chosen
+            RefreshPopList(lstStartPop, startingPop); //update list box with the group details 
         }
 
         private void btnRun_Click(object sender, EventArgs e)
@@ -44,24 +55,16 @@ namespace PVA_AgedMortality
         //Trial loop: Call "single trial" method to run as many trials as user would like 
         private void RunTrials(int trials)
         {
+            
             for (int t = 0; t < trials; t++) //Start of trial loop
             {
                 testPop = Population.ClonePop(startingPop); //keep your starting pop intact and undisturbed, create a clone to use for simulation 
-                //MessageBox.Show("Running trial " + (t + 1) + " of " + trials); //test message for debugging 
+                Ind.idCount = startingPop.Count + 1; //reset counter after every trial 
                 Trial.SingleTrial(months, testPop); //Pass your testPop and the # of months to run to the trial method in trial class 
-                trialResults.Add(testPop.Count());               
+                trialResults.Add(testPop.Count());  //record the ending population of your trial               
             } //End of trial loop
-            SaveResults("EndingPop.txt", trialResults);
-            RefreshPopList(lstTrialResults, testPop);
-            trialResults.Clear();
-        }
-
-        private void btnAdd_Click(object sender, EventArgs e) //add new individual to population
-        {
-            //TODO: expand user customization to include other ind variables of your feeder pop 
-            Ind newInd = new Ind((Convert.ToInt32(txtAge.Text) * 12), false, 0, false, 0, 0, 0, 0, true);
-            startingPop.Add(newInd);
-            RefreshPopList(lstStartPop, startingPop);
+            SaveResults("EndingPop.txt", trialResults); //Save trial results to a txt document 
+            trialResults.Clear(); //after saving the data empty your ending pop list 
         }
 
         private void RefreshPopList(ListBox lb, Population sp) //method to update population list boxes
@@ -73,14 +76,7 @@ namespace PVA_AgedMortality
             }
         }
 
-        private void btnDefault_Click(object sender, EventArgs e) //user wants to start with default population (currently LV 2020) 
-        {
-            startingPop.Clear(); //empty out starting pop list 
-            startingPop = LVstarterPop.DefaultPop(); //starting pop copies LV. TODO: decide if this should be refactored to use Population.ClonePop() instead? 
-            RefreshPopList(lstStartPop, startingPop);
-        }
-
-        private void SaveResults<T>(string filename, List<T> list)
+        private void SaveResults<T>(string filename, List<T> list) //method that opens streamwriter and saves your ending population count from each trial 
         {
             using (StreamWriter sr = new StreamWriter(filename))
             {
@@ -88,7 +84,7 @@ namespace PVA_AgedMortality
                 {
                     sr.WriteLine(value);                 
                 }
-                MessageBox.Show("File " + filename + " saved to bin/debug.");
+                MessageBox.Show("File " + filename + " saved to bin/debug."); 
             }
         }
 
@@ -121,6 +117,11 @@ namespace PVA_AgedMortality
             SaveResults("ColchResults.txt", colcheroResults);
             MessageBox.Show("Files written, sample complete. Coin flip results: STB survived " + coinCountStb + " times, AMR " + coinCountAmr +
                 " and 10 year old females survived " + coinCountColch + " times, fixed infant AMR survived " + coinFixedInf);
+        }
+
+        private void rdoDefPops_CheckedChanged(object sender, EventArgs e)
+        {
+            SelectPop();
         }
     }
 }
