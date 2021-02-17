@@ -7,7 +7,7 @@ The front end of the program is deliberately simple, and allows users to select:
 3. the number of years to simulate 
 4. the number of trials to conduct
 
-Following these selections, the simulation proceeds as follows (brief version, detailed version is below): 
+Following these selections, the simulation proceeds as follows (brief version): 
 1. Each month, the age and various other time-based variables increase for each individual. Infants who reach 12 months of age lose their mother dependency, pregnant females give birth if gestation length is achieved. 
 2. Whether an Alpha Male Replacement has occurred or not is determined via weighted coin flip
 3. Survival of each individual (including infant males and females) is tested via weighted coin flip. Odds are established using age and, for infants, whether there is AMR risk. 
