@@ -150,7 +150,7 @@ namespace PVA_AgedMortality
             this.rdoLV.Size = new System.Drawing.Size(200, 24);
             this.rdoLV.TabIndex = 11;
             this.rdoLV.TabStop = true;
-            this.rdoLV.Text = "LV (14 AF / 2 IMM / 1 IF)";
+            this.rdoLV.Text = "LV (10 AF / 2 IMM / 1 IF)";
             this.rdoLV.UseVisualStyleBackColor = true;
             this.rdoLV.CheckedChanged += new System.EventHandler(this.rdoDefPops_CheckedChanged);
             // 
