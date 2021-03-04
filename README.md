@@ -1,6 +1,8 @@
 # PVA_AgedMortality
 Population viability assessment program for Santa Rosa Capuchins, with age-based mortality rates. This is a monthly, individual based model designed to test how different frequencies of Alpha Male Replacement (AMR) occurence affects the capuchin population. 
 
+Conceptually developed in conjunction with Fernando Campos, Dept of Anthropology, UT San Antonio and Urs Kalbitzer, Department for the Ecology of Animal Societies, Max Planck Institute of Animal Behavior. All code/programming is to be blamed on Jeremy Hogan 
+
 The front end of the program is deliberately simple, and allows users to select:  
 1. one of three pre-set capuchin groups of different female group sizes. These groups are modelled after the real demographics of three Santa Rosa capuchin groups in January, 2021. 
 2. the rate of AMR occurrence for the simulation (Santa Rosa baseline is 0.03)
